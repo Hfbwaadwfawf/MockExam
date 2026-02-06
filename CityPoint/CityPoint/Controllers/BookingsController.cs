@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CityPoint.Data;
 using CityPoint.Models;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
 namespace CityPoint.Controllers
 {
+    [Authorize] // All actions require login
     public class BookingsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,130 +25,264 @@ namespace CityPoint.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bookings.ToListAsync());
+            if (User.IsInRole("Staff"))
+            {
+                // Staff see all bookings
+                var allBookings = await _context.Booking
+                    .Include(b => b.Room)
+                    .Include(b => b.User)
+                    .OrderByDescending(b => b.CreatedAt)
+                    .ToListAsync();
+                return View(allBookings);
+            }
+
+            // Customer: only own bookings
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var bookings = await _context.Booking
+                .Include(b => b.Room)
+                .Include(b => b.User)
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.CreatedAt)
+                .ToListAsync();
+            return View(bookings);
         }
 
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null) return NotFound();
+
+            Booking booking;
+
+            if (User.IsInRole("Staff"))
             {
-                return NotFound();
+                booking = await _context.Booking
+                    .Include(b => b.Room)
+                    .Include(b => b.User)
+                    .FirstOrDefaultAsync(m => m.BookingId == id);
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                booking = await _context.Booking
+                    .Include(b => b.Room)
+                    .Include(b => b.User)
+                    .FirstOrDefaultAsync(m => m.BookingId == id && m.UserId == userId);
             }
 
-            var bookings = await _context.Bookings
-                .FirstOrDefaultAsync(m => m.BookingsId == id);
-            if (bookings == null)
-            {
-                return NotFound();
-            }
-
-            return View(bookings);
+            if (booking == null) return NotFound();
+            return View(booking);
         }
 
         // GET: Bookings/Create
         public IActionResult Create()
         {
+            ViewData["RoomId"] = new SelectList(
+                _context.Room.Where(r => r.IsAvailable)
+                    .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                "RoomId",
+                "DisplayText"
+            );
             return View();
         }
 
         // POST: Bookings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // Removed BookingsId, UserId, IsPaid, Status, and CreatedAt
-
-        public async Task<IActionResult> Create([Bind("RoomId,CheckInDate,CheckOutDate,NumberOfGuests,SpecialRequests")] Bookings bookings)
+        public async Task<IActionResult> Create([Bind("RoomId,CheckInDate,CheckOutDate,NumberOfGuests,SpecialRequests")] Booking booking)
         {
+            // Remove validation for fields we're setting manually
+            ModelState.Remove("UserId");
+            ModelState.Remove("Status");
+            ModelState.Remove("IsPaid");
+            ModelState.Remove("CreatedAt");
+
             if (ModelState.IsValid)
             {
-                // ADDED: Get the logged-in user's ID from claims
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (userId == null)
+                booking.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                booking.CreatedAt = DateTime.UtcNow;
+                booking.Status = "Pending";
+                booking.IsPaid = false;
+
+                if (booking.CheckInDate < DateTime.Today)
                 {
-                    return RedirectToPage("/Account/Login", new { area = "Identity" });
+                    ModelState.AddModelError("CheckInDate", "Check-in date cannot be in the past.");
+                    ViewData["RoomId"] = new SelectList(
+                        _context.Room.Where(r => r.IsAvailable)
+                            .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                        "RoomId",
+                        "DisplayText"
+                    );
+                    return View(booking);
+                }
+                if (booking.CheckOutDate <= booking.CheckInDate)
+                {
+                    ModelState.AddModelError("CheckOutDate", "Check-out date must be after check-in date.");
+                    ViewData["RoomId"] = new SelectList(
+                        _context.Room.Where(r => r.IsAvailable)
+                            .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                        "RoomId",
+                        "DisplayText"
+                    );
+                    return View(booking);
                 }
 
-                // Set UserId to the logged-in user's ID
-                bookings.UserId = int.Parse(userId);
-
-                // Set default values 
-                bookings.IsPaid = false;
-                bookings.Status = "Pending";
-                bookings.CreatedAt = DateTime.UtcNow;
-
-                _context.Add(bookings);
+                _context.Add(booking);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Booking created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(bookings);
+
+            ViewData["RoomId"] = new SelectList(
+                _context.Room.Where(r => r.IsAvailable)
+                    .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                "RoomId",
+                "DisplayText",
+                booking.RoomId
+            );
+            return View(booking);
         }
 
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null) return NotFound();
+
+            Booking booking;
+
+            if (User.IsInRole("Staff"))
             {
-                return NotFound();
+                booking = await _context.Booking.FindAsync(id);
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                booking = await _context.Booking.FirstOrDefaultAsync(b => b.BookingId == id && b.UserId == userId);
             }
 
-            var bookings = await _context.Bookings.FindAsync(id);
-            if (bookings == null)
+            if (booking == null) return NotFound();
+
+            if (booking.Status != "Pending" && !User.IsInRole("Staff"))
             {
-                return NotFound();
+                TempData["Error"] = "Cannot edit a booking that is not pending.";
+                return RedirectToAction(nameof(Index));
             }
-            return View(bookings);
+
+            ViewData["RoomId"] = new SelectList(
+                _context.Room.Where(r => r.IsAvailable || r.RoomId == booking.RoomId)
+                    .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                "RoomId",
+                "DisplayText",
+                booking.RoomId
+            );
+            return View(booking);
         }
 
         // POST: Bookings/Edit/5
-        // NOTE: Edit method unchanged - allows editing all fields
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookingsId,UserId,RoomId,CheckInDate,CheckOutDate,NumberOfGuests,SpecialRequests,IsPaid,Status,CreatedAt")] Bookings bookings)
+        public async Task<IActionResult> Edit(int id, [Bind("BookingId,RoomId,CheckInDate,CheckOutDate,NumberOfGuests,SpecialRequests,Status,IsPaid")] Booking booking)
         {
-            if (id != bookings.BookingsId)
+            if (id != booking.BookingId) return NotFound();
+
+            Booking existingBooking;
+            if (User.IsInRole("Staff"))
             {
-                return NotFound();
+                existingBooking = await _context.Booking.AsNoTracking().FirstOrDefaultAsync(b => b.BookingId == id);
             }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                existingBooking = await _context.Booking.AsNoTracking().FirstOrDefaultAsync(b => b.BookingId == id && b.UserId == userId);
+            }
+
+            if (existingBooking == null) return NotFound();
+
+            // Remove validation for fields we're preserving
+            ModelState.Remove("UserId");
+            ModelState.Remove("CreatedAt");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(bookings);
+                    booking.UserId = existingBooking.UserId;
+                    booking.CreatedAt = existingBooking.CreatedAt;
+
+                    // If not staff, preserve Status and IsPaid
+                    if (!User.IsInRole("Staff"))
+                    {
+                        booking.Status = existingBooking.Status;
+                        booking.IsPaid = existingBooking.IsPaid;
+                    }
+
+                    if (booking.CheckInDate < DateTime.Today)
+                    {
+                        ModelState.AddModelError("CheckInDate", "Check-in date cannot be in the past.");
+                        ViewData["RoomId"] = new SelectList(
+                            _context.Room.Where(r => r.IsAvailable || r.RoomId == booking.RoomId)
+                                .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                            "RoomId",
+                            "DisplayText",
+                            booking.RoomId
+                        );
+                        return View(booking);
+                    }
+
+                    if (booking.CheckOutDate <= booking.CheckInDate)
+                    {
+                        ModelState.AddModelError("CheckOutDate", "Check-out date must be after check-in date.");
+                        ViewData["RoomId"] = new SelectList(
+                            _context.Room.Where(r => r.IsAvailable || r.RoomId == booking.RoomId)
+                                .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                            "RoomId",
+                            "DisplayText",
+                            booking.RoomId
+                        );
+                        return View(booking);
+                    }
+
+                    _context.Update(booking);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Booking updated successfully!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookingsExists(bookings.BookingsId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!_context.Booking.Any(e => e.BookingId == id)) return NotFound();
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(bookings);
+
+            ViewData["RoomId"] = new SelectList(
+                _context.Room.Where(r => r.IsAvailable || r.RoomId == booking.RoomId)
+                    .Select(r => new { r.RoomId, DisplayText = r.Name + " - " + r.Location + " (£" + r.HourlyRate + "/hr)" }),
+                "RoomId",
+                "DisplayText",
+                booking.RoomId
+            );
+            return View(booking);
         }
 
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null) return NotFound();
+
+            Booking booking;
+
+            if (User.IsInRole("Staff"))
             {
-                return NotFound();
+                booking = await _context.Booking.Include(b => b.Room).Include(b => b.User).FirstOrDefaultAsync(b => b.BookingId == id);
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                booking = await _context.Booking.Include(b => b.Room).Include(b => b.User).FirstOrDefaultAsync(b => b.BookingId == id && b.UserId == userId);
             }
 
-            var bookings = await _context.Bookings
-                .FirstOrDefaultAsync(m => m.BookingsId == id);
-            if (bookings == null)
-            {
-                return NotFound();
-            }
-
-            return View(bookings);
+            if (booking == null) return NotFound();
+            return View(booking);
         }
 
         // POST: Bookings/Delete/5
@@ -154,19 +290,76 @@ namespace CityPoint.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bookings = await _context.Bookings.FindAsync(id);
-            if (bookings != null)
+            Booking booking;
+            if (User.IsInRole("Staff"))
             {
-                _context.Bookings.Remove(bookings);
+                booking = await _context.Booking.FindAsync(id);
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                booking = await _context.Booking.FirstOrDefaultAsync(b => b.BookingId == id && b.UserId == userId);
             }
 
-            await _context.SaveChangesAsync();
+            if (booking != null)
+            {
+                _context.Booking.Remove(booking);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Booking deleted successfully!";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookingsExists(int id)
+        // POST: Bookings/Approve/5
+        [HttpPost]
+        [Authorize(Roles = "Staff")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Approve(int id)
         {
-            return _context.Bookings.Any(e => e.BookingsId == id);
+            var booking = await _context.Booking.FindAsync(id);
+            if (booking == null) return NotFound();
+
+            if (booking.Status != "Pending")
+            {
+                TempData["Error"] = "Only pending bookings can be approved.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            booking.Status = "Approved";
+            _context.Update(booking);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Booking #{booking.BookingId} has been approved.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Bookings/Deny/5
+        [HttpPost]
+        [Authorize(Roles = "Staff")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Deny(int id)
+        {
+            var booking = await _context.Booking.FindAsync(id);
+            if (booking == null) return NotFound();
+
+            if (booking.Status != "Pending")
+            {
+                TempData["Error"] = "Only pending bookings can be denied.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            booking.Status = "Denied";
+            _context.Update(booking);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Booking #{booking.BookingId} has been denied.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool BookingExists(int id)
+        {
+            return _context.Booking.Any(e => e.BookingId == id);
         }
     }
 }

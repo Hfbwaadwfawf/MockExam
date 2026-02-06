@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Welcome to <span class="text-orange">City Point</span></h1>
+        <p class="hero-subtitle">
+            Premium meeting rooms and professional equipment rentals for your business needs.
+            Book the perfect space for your next collaboration, presentation, or private work session.
+        </p>
+        <div>
+            <a asp-controller="Rooms" asp-action="Index" class="btn-primary-custom">View Available Rooms</a>
+            <a asp-controller="Bookings" asp-action="Create" class="btn-secondary-custom">Book Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3 class="feature-title">Professional Spaces</h3>
+                    <p class="feature-description">
+                        From intimate focus rooms to large boardrooms, we have the perfect space for every occasion.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Instant Booking</h3>
+                    <p class="feature-description">
+                        Browse available rooms and book instantly with our streamlined reservation system.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Premium Equipment</h3>
+                    <p class="feature-description">
+                        State-of-the-art technology and equipment available with every room rental.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

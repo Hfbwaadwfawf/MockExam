@@ -1,36 +1,33 @@
-﻿@model IEnumerable<CityPoint.Models.Rooms>
+﻿@model IEnumerable<CityPoint.Models.Room>
 @{
     ViewData["Title"] = "Index";
 }
-<h1>Rooms</h1>
+<h1>Index</h1>
 
-<!-- Filter Form -->
-<div class="card mb-4">
+<div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">Filter Rooms</h5>
-        <form asp-action="Index" method="get">
+        <form method="get" asp-action="Index">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="minPrice" class="form-label">Min Price (£/hour)</label>
-                    <input type="number" class="form-control" id="minPrice" name="minPrice"
-                           value="@ViewData["MinPrice"]" step="0.01" min="0" placeholder="0.00">
+                    <label for="minPrice" class="form-label">Min Hourly Rate</label>
+                    <input type="number" step="0.01" class="form-control" id="minPrice" name="minPrice" value="@ViewData["MinPrice"]" placeholder="Min price">
                 </div>
                 <div class="col-md-3">
-                    <label for="maxPrice" class="form-label">Max Price (£/hour)</label>
-                    <input type="number" class="form-control" id="maxPrice" name="maxPrice"
-                           value="@ViewData["MaxPrice"]" step="0.01" min="0" placeholder="999.99">
+                    <label for="maxPrice" class="form-label">Max Hourly Rate</label>
+                    <input type="number" step="0.01" class="form-control" id="maxPrice" name="maxPrice" value="@ViewData["MaxPrice"]" placeholder="Max price">
                 </div>
                 <div class="col-md-3">
                     <label for="isAvailable" class="form-label">Availability</label>
-                    <select class="form-select" id="isAvailable" name="isAvailable">
-                        <option value="">All Rooms</option>
-                        <option value="true" selected="@(ViewData["IsAvailable"]?.ToString() == "True")">Available Only</option>
-                        <option value="false" selected="@(ViewData["IsAvailable"]?.ToString() == "False")">Unavailable Only</option>
+                    <select class="form-control" id="isAvailable" name="isAvailable">
+                        <option value="">All</option>
+                        <option value="true" selected="@(ViewData["IsAvailable"] as bool? == true)">Available</option>
+                        <option value="false" selected="@(ViewData["IsAvailable"] as bool? == false)">Not Available</option>
                     </select>
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary me-2">Filter</button>
-                    <a asp-action="Index" class="btn btn-secondary">Clear</a>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary mt-4">Apply Filters</button>
+                    <a asp-action="Index" class="btn btn-secondary mt-4">Clear</a>
                 </div>
             </div>
         </form>
@@ -38,9 +35,8 @@
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
-
 <table class="table">
     <thead>
         <tr>
@@ -73,7 +69,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @item.HourlyRate.ToString("C", new System.Globalization.CultureInfo("en-GB"))
+                    @Html.DisplayFor(modelItem => item.HourlyRate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Location)
@@ -82,9 +78,9 @@
                     @Html.DisplayFor(modelItem => item.IsAvailable)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.RoomsId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.RoomsId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.RoomsId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.RoomId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RoomId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RoomId">Delete</a>
                 </td>
             </tr>
         }

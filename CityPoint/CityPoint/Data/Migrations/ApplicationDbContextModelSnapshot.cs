@@ -22,13 +22,13 @@ namespace CityPoint.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CityPoint.Models.Bookings", b =>
+            modelBuilder.Entity("CityPoint.Models.Booking", b =>
                 {
-                    b.Property<int>("BookingsId")
+                    b.Property<int>("BookingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingId"));
 
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("datetime2");
@@ -48,9 +48,6 @@ namespace CityPoint.Data.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RoomsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SpecialRequests")
                         .HasColumnType("nvarchar(max)");
 
@@ -58,30 +55,34 @@ namespace CityPoint.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("BookingsId");
+                    b.HasKey("BookingId");
 
-                    b.HasIndex("RoomsId");
+                    b.HasIndex("RoomId");
 
-                    b.ToTable("Bookings");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Booking");
                 });
 
-            modelBuilder.Entity("CityPoint.Models.Rooms", b =>
+            modelBuilder.Entity("CityPoint.Models.Room", b =>
                 {
-                    b.Property<int>("RoomsId")
+                    b.Property<int>("RoomId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("HourlyRate")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HourlyRate")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
@@ -94,9 +95,9 @@ namespace CityPoint.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RoomsId");
+                    b.HasKey("RoomId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Room");
                 });
 
             modelBuilder.Entity("CityPoint.Models.Staff", b =>
@@ -326,13 +327,23 @@ namespace CityPoint.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CityPoint.Models.Bookings", b =>
+            modelBuilder.Entity("CityPoint.Models.Booking", b =>
                 {
-                    b.HasOne("CityPoint.Models.Rooms", "Rooms")
-                        .WithMany("Bookings")
-                        .HasForeignKey("RoomsId");
+                    b.HasOne("CityPoint.Models.Room", "Room")
+                        .WithMany("Booking")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Rooms");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -386,9 +397,9 @@ namespace CityPoint.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CityPoint.Models.Rooms", b =>
+            modelBuilder.Entity("CityPoint.Models.Room", b =>
                 {
-                    b.Navigation("Bookings");
+                    b.Navigation("Booking");
                 });
 #pragma warning restore 612, 618
         }

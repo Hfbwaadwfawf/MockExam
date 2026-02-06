@@ -14,7 +14,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Register Google external login here (must be during service configuration, before Build)
+// Add Google authentication (BEFORE builder.Build())
 builder.Services.AddAuthentication().AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Google:ClientId"];
@@ -23,20 +23,8 @@ builder.Services.AddAuthentication().AddGoogle(options =>
 
 builder.Services.AddControllersWithViews();
 
+// BUILD THE APP - After this line, you cannot add more services
 var app = builder.Build();
-
-// Seed data
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-
-    await SeedData.SeedRoles(services, userManager, roleManager);
-
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    await SeedData.SeedRoomsAsync(context);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -51,19 +39,29 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
-// Ensure authentication middleware runs before authorization
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Seed data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        await SeedData.Initialize(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred seeding the database.");
+    }
+}
 
 app.Run();
