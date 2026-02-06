@@ -1,4 +1,4 @@
-﻿@model CityPoint.Models.Rooms
+﻿@model CityPoint.Models.Room
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Rooms</h4>
+    <h4>Room</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -43,6 +43,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.RoomsId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.RoomId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

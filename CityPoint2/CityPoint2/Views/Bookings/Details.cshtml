@@ -1,0 +1,63 @@
+﻿@model CityPoint2.Models.Bookings
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">Booking Details</h1>
+        <p class="page-subtitle">Reservation #@Model.BookingsId</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="details-container">
+        <dl class="row">
+            <dt class="col-sm-4">Room</dt>
+            <dd class="col-sm-8">Room #@Model.Rooms?.RoomsId</dd>
+
+            <dt class="col-sm-4">Check-In</dt>
+            <dd class="col-sm-8">@Model.CheckInDate.ToString("MMMM dd, yyyy - h:mm tt")</dd>
+
+            <dt class="col-sm-4">Check-Out</dt>
+            <dd class="col-sm-8">@Model.CheckOutDate.ToString("MMMM dd, yyyy - h:mm tt")</dd>
+
+            <dt class="col-sm-4">Number of Guests</dt>
+            <dd class="col-sm-8">@Model.NumberOfGuests</dd>
+
+            <dt class="col-sm-4">Special Requests</dt>
+            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.SpecialRequests) ? "None" : Model.SpecialRequests)</dd>
+
+            <dt class="col-sm-4">Payment Status</dt>
+            <dd class="col-sm-8">@(Model.IsPaid ? "✓ Paid" : "⏳ Payment Pending")</dd>
+
+            <dt class="col-sm-4">Booking Status</dt>
+            <dd class="col-sm-8">
+                @if (Model.Status == "Pending")
+                {
+                    <span class="status-badge status-pending">Pending</span>
+                }
+                else if (Model.Status == "Confirmed")
+                {
+                    <span class="status-badge status-confirmed">Confirmed</span>
+                }
+                else if (Model.Status == "Completed")
+                {
+                    <span class="status-badge status-completed">Completed</span>
+                }
+                else
+                {
+                    <span>@Model.Status</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4">Created At</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToString("MMMM dd, yyyy - h:mm tt")</dd>
+        </dl>
+    </div>
+
+    <div class="action-links">
+        <a asp-action="Edit" asp-route-id="@Model.BookingsId">Edit Booking</a>
+        <a asp-action="Index">Back to Bookings</a>
+    </div>
+</div>

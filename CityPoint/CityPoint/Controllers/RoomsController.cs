@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CityPoint.Data;
 using CityPoint.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CityPoint.Controllers
 {
+    [Authorize] // All actions require login
     public class RoomsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,26 +22,27 @@ namespace CityPoint.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index(double? minPrice, double? maxPrice, bool? isAvailable)
+        [AllowAnonymous] // Anyone can see the rooms list if you want, else remove AllowAnonymous
+        public async Task<IActionResult> Index(float? minPrice, float? maxPrice, bool? isAvailable)
         {
-            var rooms = _context.Rooms.AsQueryable();
+            var room = _context.Room.AsQueryable();
 
             // Filter by minimum price
             if (minPrice.HasValue)
             {
-                rooms = rooms.Where(r => r.HourlyRate >= minPrice.Value);
+                room = room.Where(r => r.HourlyRate >= (decimal)maxPrice.Value);
             }
 
             // Filter by maximum price
             if (maxPrice.HasValue)
             {
-                rooms = rooms.Where(r => r.HourlyRate <= maxPrice.Value);
+                room = room.Where(r => r.HourlyRate <= (decimal)maxPrice.Value);
             }
 
             // Filter by availability
             if (isAvailable.HasValue)
             {
-                rooms = rooms.Where(r => r.IsAvailable == isAvailable.Value);
+                room = room.Where(r => r.IsAvailable == isAvailable.Value);
             }
 
             // Store filter values in ViewData to maintain them in the form
@@ -47,10 +50,11 @@ namespace CityPoint.Controllers
             ViewData["MaxPrice"] = maxPrice;
             ViewData["IsAvailable"] = isAvailable;
 
-            return View(await rooms.ToListAsync());
+            return View(await room.ToListAsync());
         }
 
         // GET: Rooms/Details/5
+        [AllowAnonymous] // Customers and Staff can view details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,39 +62,40 @@ namespace CityPoint.Controllers
                 return NotFound();
             }
 
-            var rooms = await _context.Rooms
-                .FirstOrDefaultAsync(m => m.RoomsId == id);
-            if (rooms == null)
+            var room = await _context.Room
+                .FirstOrDefaultAsync(m => m.RoomId == id);
+            if (room == null)
             {
                 return NotFound();
             }
 
-            return View(rooms);
+            return View(room);
         }
 
         // GET: Rooms/Create
+        [Authorize(Roles = "Staff")] // Only Staff can create rooms
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Rooms/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoomsId,Name,Description,HourlyRate,Location,IsAvailable")] Rooms rooms)
+        [Authorize(Roles = "Staff")] // Only Staff
+        public async Task<IActionResult> Create([Bind("Name,Description,HourlyRate,Location,IsAvailable")] Room room)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rooms);
+                _context.Add(room);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(rooms);
+            return View(room);
         }
 
         // GET: Rooms/Edit/5
+        [Authorize(Roles = "Staff")] // Only Staff can edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -98,22 +103,21 @@ namespace CityPoint.Controllers
                 return NotFound();
             }
 
-            var rooms = await _context.Rooms.FindAsync(id);
-            if (rooms == null)
+            var room = await _context.Room.FindAsync(id);
+            if (room == null)
             {
                 return NotFound();
             }
-            return View(rooms);
+            return View(room);
         }
 
         // POST: Rooms/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RoomsId,Name,Description,HourlyRate,Location,IsAvailable")] Rooms rooms)
+        [Authorize(Roles = "Staff")] // Only Staff
+        public async Task<IActionResult> Edit(int id, [Bind("RoomId,Name,Description,HourlyRate,Location,IsAvailable")] Room room)
         {
-            if (id != rooms.RoomsId)
+            if (id != room.RoomId)
             {
                 return NotFound();
             }
@@ -122,12 +126,12 @@ namespace CityPoint.Controllers
             {
                 try
                 {
-                    _context.Update(rooms);
+                    _context.Update(room);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoomsExists(rooms.RoomsId))
+                    if (!RoomExists(room.RoomId))
                     {
                         return NotFound();
                     }
@@ -138,10 +142,11 @@ namespace CityPoint.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(rooms);
+            return View(room);
         }
 
         // GET: Rooms/Delete/5
+        [Authorize(Roles = "Staff")] // Only Staff can delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,34 +154,35 @@ namespace CityPoint.Controllers
                 return NotFound();
             }
 
-            var rooms = await _context.Rooms
-                .FirstOrDefaultAsync(m => m.RoomsId == id);
-            if (rooms == null)
+            var room = await _context.Room
+                .FirstOrDefaultAsync(m => m.RoomId == id);
+            if (room == null)
             {
                 return NotFound();
             }
 
-            return View(rooms);
+            return View(room);
         }
 
         // POST: Rooms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Staff")] // Only Staff
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var rooms = await _context.Rooms.FindAsync(id);
-            if (rooms != null)
+            var room = await _context.Room.FindAsync(id);
+            if (room != null)
             {
-                _context.Rooms.Remove(rooms);
+                _context.Room.Remove(room);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RoomsExists(int id)
+        private bool RoomExists(int id)
         {
-            return _context.Rooms.Any(e => e.RoomsId == id);
+            return _context.Room.Any(e => e.RoomId == id);
         }
     }
 }

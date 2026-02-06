@@ -12,11 +12,11 @@ using System;
 using System.Reflection;
 
 [assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-CityPoint-c1cb66e2-fe6f-4a2c-b1c9-aaa1f0a24ae3")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-CityPoint-1d36572a-15ed-4632-aeed-522ae0f8d793")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("CityPoint")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac7a5062decb37b11d598ed9fb1561cf6edf2409")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+55442719bc667564c316842b76d8d3037f3be5c8")]
 [assembly: System.Reflection.AssemblyProductAttribute("CityPoint")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CityPoint")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

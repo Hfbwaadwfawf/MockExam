@@ -10,8 +10,18 @@ namespace CityPoint.Data
             : base(options)
         {
         }
-        public DbSet<CityPoint.Models.Rooms> Rooms { get; set; } = default!;
-        public DbSet<CityPoint.Models.Staff> Staff { get; set; } = default!;
-        public DbSet<CityPoint.Models.Bookings> Bookings { get; set; } = default!;
+
+        public DbSet<Room> Room { get; set; } = default!;
+        public DbSet<Booking> Booking { get; set; } = default!;
+        public DbSet<Staff> Staff { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Room>()
+                .Property(r => r.HourlyRate)
+                .HasPrecision(18, 2); // 18 total digits, 2 after decimal point
+        }
     }
 }

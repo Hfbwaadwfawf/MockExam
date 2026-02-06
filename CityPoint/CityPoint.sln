@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.14.36915.13 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityPoint", "CityPoint\CityPoint.csproj", "{4EB445ED-6AC9-40CF-A2DB-96020FE43FB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityPoint", "CityPoint\CityPoint.csproj", "{FC84FF1F-7D43-4A26-A064-4B179A6C600B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4EB445ED-6AC9-40CF-A2DB-96020FE43FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EB445ED-6AC9-40CF-A2DB-96020FE43FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EB445ED-6AC9-40CF-A2DB-96020FE43FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EB445ED-6AC9-40CF-A2DB-96020FE43FB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC84FF1F-7D43-4A26-A064-4B179A6C600B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC84FF1F-7D43-4A26-A064-4B179A6C600B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC84FF1F-7D43-4A26-A064-4B179A6C600B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC84FF1F-7D43-4A26-A064-4B179A6C600B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CD82013-F3D2-4CAE-9E6C-BA20602D0624}
 	EndGlobalSection
 EndGlobal

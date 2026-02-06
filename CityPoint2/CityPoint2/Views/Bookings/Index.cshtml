@@ -1,0 +1,87 @@
+﻿@model IEnumerable<CityPoint2.Models.Bookings>
+@if (TempData["Success"] != null)
+{
+    <div style="background-color: #D4EDDA; color: #155724; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div style="background-color: #F8D7DA; color: #721C24; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+        @TempData["Error"]
+    </div>
+}
+@{
+    ViewData["Title"] = "Bookings";
+}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">Bookings</h1>
+        <p class="page-subtitle">View and manage your room reservations</p>
+    </div>
+</div>
+<div class="container">
+    <div style="margin-bottom: 1.5rem;">
+        <a asp-action="Create" class="btn-primary-custom">+ Create New Booking</a>
+    </div>
+    <div class="table-container">
+        @if (Model != null && Model.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Check-In</th>
+                        <th>Check-Out</th>
+                        <th>Guests</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(item.Rooms != null ? item.Rooms.Name : $"Room #{item.RoomsId}")</td>
+                            <td>@item.CheckInDate.ToString("MMM dd, yyyy h:mm tt")</td>
+                            <td>@item.CheckOutDate.ToString("MMM dd, yyyy h:mm tt")</td>
+                            <td>@item.NumberOfGuests</td>
+                            <td>
+                                @if (item.Status == "Pending")
+                                {
+                                    <span class="status-badge status-pending">Pending</span>
+                                }
+                                else if (item.Status == "Confirmed")
+                                {
+                                    <span class="status-badge status-confirmed">Confirmed</span>
+                                }
+                                else if (item.Status == "Completed")
+                                {
+                                    <span class="status-badge status-completed">Completed</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge">@item.Status</span>
+                                }
+                            </td>
+                            <td>@(item.IsPaid ? "✓ Paid" : "⏳ Unpaid")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.BookingsId">Details</a> |
+                                <a asp-action="Edit" asp-route-id="@item.BookingsId">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@item.BookingsId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div style="text-align: center; padding: 3rem; color: var(--medium-grey);">
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">No bookings yet</p>
+                <p>Create your first booking to get started!</p>
+            </div>
+        }
+    </div>
+</div>
