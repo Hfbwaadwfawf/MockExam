@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "H:\\GitHub\\MockExam\\CityPoint\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|h:\\github\\mockexam\\citypoint\\citypoint\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|h:\\github\\mockexam\\citypoint\\citypoint\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|h:\\github\\mockexam\\citypoint\\citypoint\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|h:\\github\\mockexam\\citypoint\\citypoint\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,39 +19,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Booking.cs",
-              "DocumentMoniker": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Models\\Booking.cs",
-              "RelativeDocumentMoniker": "CityPoint\\Models\\Booking.cs",
-              "ToolTip": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Models\\Booking.cs",
-              "RelativeToolTip": "CityPoint\\Models\\Booking.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T10:46:17.482Z",
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "CityPoint\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "CityPoint\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABcAAAAAAAAAAAAuwDsAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-06T13:03:31.617Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BookingsController.cs",
-              "DocumentMoniker": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Controllers\\BookingsController.cs",
-              "RelativeDocumentMoniker": "CityPoint\\Controllers\\BookingsController.cs",
-              "ToolTip": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Controllers\\BookingsController.cs",
-              "RelativeToolTip": "CityPoint\\Controllers\\BookingsController.cs",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAIwCYAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T10:33:21.373Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\appsettings.json",
-              "RelativeDocumentMoniker": "CityPoint\\appsettings.json",
-              "ToolTip": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\appsettings.json",
-              "RelativeToolTip": "CityPoint\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-06T10:23:25.279Z"
             }
           ]
         }

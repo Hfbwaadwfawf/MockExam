@@ -166,7 +166,6 @@ namespace CityPoint.Controllers
             // Block editing if status is not Pending
             if (booking.Status != "Pending")
             {
-                TempData["Error"] = "Cannot edit a booking that is not pending.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -316,7 +315,6 @@ namespace CityPoint.Controllers
             {
                 _context.Booking.Remove(booking);
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "Booking deleted successfully!";
             }
 
             return RedirectToAction(nameof(Index));

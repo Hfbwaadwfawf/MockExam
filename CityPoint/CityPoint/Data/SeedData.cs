@@ -6,7 +6,6 @@ namespace CityPoint.Data
 {
     public class SeedData
     {
-        // MAIN METHOD CALLED FROM PROGRAM.CS
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
             using var context = new ApplicationDbContext(
@@ -41,7 +40,6 @@ namespace CityPoint.Data
                 }
             }
 
-            // ===== STAFF USER =====
             var staffUser = await userManager.FindByEmailAsync("staff@example.com");
             if (staffUser == null)
             {
@@ -60,7 +58,6 @@ namespace CityPoint.Data
                 await userManager.AddToRoleAsync(staffUser, "Staff");
             }
 
-            // ===== CUSTOMER USER =====
             var customerUser = await userManager.FindByEmailAsync("customer@example.com");
             if (customerUser == null)
             {
@@ -79,7 +76,6 @@ namespace CityPoint.Data
                 await userManager.AddToRoleAsync(customerUser, "Customer");
             }
 
-            // ===== USER1 =====
             var user1 = await userManager.FindByEmailAsync("user1@example.com");
             if (user1 == null)
             {
@@ -98,7 +94,6 @@ namespace CityPoint.Data
                 await userManager.AddToRoleAsync(user1, "Customer");
             }
 
-            // ===== USER2 =====
             var user2 = await userManager.FindByEmailAsync("user2@example.com");
             if (user2 == null)
             {
@@ -122,11 +117,11 @@ namespace CityPoint.Data
         private static async Task SeedRooms(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             if (context.Room.Any())
-                return; // already seeded
+                return;
 
             var staffUser = await userManager.FindByEmailAsync("staff@example.com");
             if (staffUser == null)
-                return; // Can't seed without staff user
+                return;
 
             var rooms = new List<Room>
             {
@@ -136,7 +131,7 @@ namespace CityPoint.Data
                     Description = "Premium boardroom with video conferencing and seating for 12.",
                     HourlyRate = 75.00m,
                     Location = "5th Floor, Building A",
-                    IsAvailable = true,
+                    IsAvailable = false,
                 },
                 new Room
                 {
