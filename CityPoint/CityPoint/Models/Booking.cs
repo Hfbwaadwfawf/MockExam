@@ -5,8 +5,8 @@ namespace CityPoint.Models
     public class Booking
     {
         public int BookingId { get; set; }
-        public required string UserId { get; set; } // FK to AspNetUsers (string)
-        public required int RoomId { get; set; } // FK to Rooms.RoomsId (int, not string!)
+        public required string UserId { get; set; } // FK to AspNetUsers
+        public required int RoomId { get; set; } // FK to Rooms.RoomsId 
         public required DateTime CheckInDate { get; set; }
         public required DateTime CheckOutDate { get; set; }
         public required int NumberOfGuests { get; set; }
