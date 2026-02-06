@@ -22,7 +22,10 @@ namespace CityPoint.Data
             await SeedRoles(userManager, roleManager);
 
             // Seed rooms
-            await SeedRooms(context);
+            await SeedRooms(context, userManager);
+
+            // Seed bookings
+            await SeedBookingsAsync(serviceProvider, userManager);
         }
 
         // CREATE ROLES + DEFAULT USERS
@@ -75,15 +78,57 @@ namespace CityPoint.Data
             {
                 await userManager.AddToRoleAsync(customerUser, "Customer");
             }
+
+            // ===== USER1 =====
+            var user1 = await userManager.FindByEmailAsync("user1@example.com");
+            if (user1 == null)
+            {
+                user1 = new IdentityUser
+                {
+                    UserName = "user1@example.com",
+                    Email = "user1@example.com",
+                    EmailConfirmed = true
+                };
+
+                await userManager.CreateAsync(user1, "User1@123");
+            }
+
+            if (!await userManager.IsInRoleAsync(user1, "Customer"))
+            {
+                await userManager.AddToRoleAsync(user1, "Customer");
+            }
+
+            // ===== USER2 =====
+            var user2 = await userManager.FindByEmailAsync("user2@example.com");
+            if (user2 == null)
+            {
+                user2 = new IdentityUser
+                {
+                    UserName = "user2@example.com",
+                    Email = "user2@example.com",
+                    EmailConfirmed = true
+                };
+
+                await userManager.CreateAsync(user2, "User2@123");
+            }
+
+            if (!await userManager.IsInRoleAsync(user2, "Customer"))
+            {
+                await userManager.AddToRoleAsync(user2, "Customer");
+            }
         }
 
         // SEED ROOMS
-        private static async Task SeedRooms(ApplicationDbContext context)
+        private static async Task SeedRooms(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             if (context.Room.Any())
                 return; // already seeded
 
-            var rooms = new Room[]
+            var staffUser = await userManager.FindByEmailAsync("staff@example.com");
+            if (staffUser == null)
+                return; // Can't seed without staff user
+
+            var rooms = new List<Room>
             {
                 new Room
                 {
@@ -91,7 +136,7 @@ namespace CityPoint.Data
                     Description = "Premium boardroom with video conferencing and seating for 12.",
                     HourlyRate = 75.00m,
                     Location = "5th Floor, Building A",
-                    IsAvailable = true
+                    IsAvailable = true,
                 },
                 new Room
                 {
@@ -99,7 +144,7 @@ namespace CityPoint.Data
                     Description = "Large hall for events and seminars up to 50 people.",
                     HourlyRate = 125.00m,
                     Location = "Ground Floor, Building B",
-                    IsAvailable = true
+                    IsAvailable = true,
                 },
                 new Room
                 {
@@ -107,12 +152,59 @@ namespace CityPoint.Data
                     Description = "Small collaborative meeting space for teams.",
                     HourlyRate = 35.00m,
                     Location = "3rd Floor, Building A",
-                    IsAvailable = true
+                    IsAvailable = true,
                 }
             };
 
             context.Room.AddRange(rooms);
             await context.SaveChangesAsync();
+        }
+
+        // SEED BOOKINGS
+        public static async Task SeedBookingsAsync(IServiceProvider serviceProvider, UserManager<IdentityUser> userManager)
+        {
+            using var scope = serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            if (!context.Booking.Any())
+            {
+                var user1 = await userManager.FindByEmailAsync("user1@example.com");
+                var user2 = await userManager.FindByEmailAsync("user2@example.com");
+
+                if (user1 != null && user2 != null)
+                {
+                    var bookings = new List<Booking>()
+                    {
+                        new Booking
+                        {
+                            UserId = user1.Id,
+                            RoomId = 1,
+                            CheckInDate = DateTime.Today.AddDays(7),
+                            CheckOutDate = DateTime.Today.AddDays(7).AddHours(3),
+                            NumberOfGuests = 8,
+                            SpecialRequests = "Need projector and whiteboard",
+                            IsPaid = false,
+                            Status = "Pending",
+                            CreatedAt = DateTime.UtcNow
+                        },
+                        new Booking
+                        {
+                            UserId = user2.Id,
+                            RoomId = 2,
+                            CheckInDate = DateTime.Today.AddDays(14),
+                            CheckOutDate = DateTime.Today.AddDays(14).AddHours(5),
+                            NumberOfGuests = 25,
+                            SpecialRequests = "Catering required",
+                            IsPaid = false,
+                            Status = "Pending",
+                            CreatedAt = DateTime.UtcNow
+                        },
+                    };
+
+                    context.Booking.AddRange(bookings);
+                    await context.SaveChangesAsync();
+                }
+            }
         }
     }
 }

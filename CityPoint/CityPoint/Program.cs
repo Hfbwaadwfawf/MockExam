@@ -14,7 +14,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Add Google authentication (BEFORE builder.Build())
 builder.Services.AddAuthentication().AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Google:ClientId"];
@@ -23,7 +22,6 @@ builder.Services.AddAuthentication().AddGoogle(options =>
 
 builder.Services.AddControllersWithViews();
 
-// BUILD THE APP - After this line, you cannot add more services
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,18 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\",
+  "WorkspaceRootPath": "H:\\GitHub\\MockExam\\CityPoint\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|c:\\users\\deroy\\documents\\github\\mockexam\\citypoint\\citypoint\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|h:\\github\\mockexam\\citypoint\\citypoint\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|c:\\users\\deroy\\documents\\github\\mockexam\\citypoint\\citypoint\\views\\bookings\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\views\\bookings\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|c:\\users\\deroy\\documents\\github\\mockexam\\citypoint\\citypoint\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|h:\\github\\mockexam\\citypoint\\citypoint\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{FC84FF1F-7D43-4A26-A064-4B179A6C600B}|CityPoint\\CityPoint.csproj|solutionrelative:citypoint\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,45 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\CityPoint\\Views\\Bookings\\Create.cshtml",
-              "RelativeDocumentMoniker": "CityPoint\\Views\\Bookings\\Create.cshtml",
-              "ToolTip": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\CityPoint\\Views\\Bookings\\Create.cshtml",
-              "RelativeToolTip": "CityPoint\\Views\\Bookings\\Create.cshtml",
-              "ViewState": "AgIAACsAAAAAAAAAAAAqwEIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-05T22:02:57.774Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "BookingsController.cs",
-              "DocumentMoniker": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\CityPoint\\Controllers\\BookingsController.cs",
+              "DocumentMoniker": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Controllers\\BookingsController.cs",
               "RelativeDocumentMoniker": "CityPoint\\Controllers\\BookingsController.cs",
-              "ToolTip": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\CityPoint\\Controllers\\BookingsController.cs",
+              "ToolTip": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\Controllers\\BookingsController.cs",
               "RelativeToolTip": "CityPoint\\Controllers\\BookingsController.cs",
-              "ViewState": "AgIAAFcBAAAAAAAAAAAuwGwBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-05T19:56:34.25Z",
+              "WhenOpened": "2026-02-06T10:33:21.373Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SeedData.cs",
-              "DocumentMoniker": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\CityPoint\\Data\\SeedData.cs",
-              "RelativeDocumentMoniker": "CityPoint\\Data\\SeedData.cs",
-              "ToolTip": "C:\\Users\\deroy\\Documents\\GitHub\\MockExam\\CityPoint\\CityPoint\\Data\\SeedData.cs",
-              "RelativeToolTip": "CityPoint\\Data\\SeedData.cs",
-              "ViewState": "AgIAAFwAAAAAAAAAAAAwwA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-05T15:42:59.689Z",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\appsettings.json",
+              "RelativeDocumentMoniker": "CityPoint\\appsettings.json",
+              "ToolTip": "H:\\GitHub\\MockExam\\CityPoint\\CityPoint\\appsettings.json",
+              "RelativeToolTip": "CityPoint\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-06T10:23:25.279Z",
               "EditorCaption": ""
             }
           ]

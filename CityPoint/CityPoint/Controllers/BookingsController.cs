@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CityPoint.Controllers
 {
-    [Authorize] // All actions require login
+    [Authorize] // All actions require user login in this controller
     public class BookingsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,7 +36,7 @@ namespace CityPoint.Controllers
                 return View(allBookings);
             }
 
-            // Customer: only own bookings
+            // Customer can only see their own bookings
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var bookings = await _context.Booking
                 .Include(b => b.Room)
@@ -99,6 +99,7 @@ namespace CityPoint.Controllers
 
             if (ModelState.IsValid)
             {
+                // Automatically set UserId to current logged-in user
                 booking.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 booking.CreatedAt = DateTime.UtcNow;
                 booking.Status = "Pending";
@@ -162,7 +163,8 @@ namespace CityPoint.Controllers
 
             if (booking == null) return NotFound();
 
-            if (booking.Status != "Pending" && !User.IsInRole("Staff"))
+            // Block editing if status is not Pending
+            if (booking.Status != "Pending")
             {
                 TempData["Error"] = "Cannot edit a booking that is not pending.";
                 return RedirectToAction(nameof(Index));
@@ -185,6 +187,7 @@ namespace CityPoint.Controllers
         {
             if (id != booking.BookingId) return NotFound();
 
+            // Get the existing booking from database
             Booking existingBooking;
             if (User.IsInRole("Staff"))
             {
@@ -206,12 +209,20 @@ namespace CityPoint.Controllers
             {
                 try
                 {
+                    // ALWAYS preserve the original UserId and CreatedAt
                     booking.UserId = existingBooking.UserId;
                     booking.CreatedAt = existingBooking.CreatedAt;
 
-                    // If not staff, preserve Status and IsPaid
+                    // Customers can ONLY edit if status is Pending
+                    // Staff can edit Status and IsPaid
                     if (!User.IsInRole("Staff"))
                     {
+                        // Customer: preserve Status and IsPaid, force status check
+                        if (existingBooking.Status != "Pending")
+                        {
+                            TempData["Error"] = "Cannot edit a booking that is not pending.";
+                            return RedirectToAction(nameof(Index));
+                        }
                         booking.Status = existingBooking.Status;
                         booking.IsPaid = existingBooking.IsPaid;
                     }
@@ -322,15 +333,12 @@ namespace CityPoint.Controllers
 
             if (booking.Status != "Pending")
             {
-                TempData["Error"] = "Only pending bookings can be approved.";
                 return RedirectToAction(nameof(Index));
             }
 
             booking.Status = "Approved";
             _context.Update(booking);
             await _context.SaveChangesAsync();
-
-            TempData["Success"] = $"Booking #{booking.BookingId} has been approved.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -345,15 +353,12 @@ namespace CityPoint.Controllers
 
             if (booking.Status != "Pending")
             {
-                TempData["Error"] = "Only pending bookings can be denied.";
                 return RedirectToAction(nameof(Index));
             }
 
             booking.Status = "Denied";
             _context.Update(booking);
             await _context.SaveChangesAsync();
-
-            TempData["Success"] = $"Booking #{booking.BookingId} has been denied.";
             return RedirectToAction(nameof(Index));
         }
 
