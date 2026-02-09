@@ -1,7 +1,5 @@
 wwwroot\css\site.css
-wwwroot\css\styles.css
 wwwroot\favicon.ico
-wwwroot\js\accessibility.js
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -63,6 +61,8 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\css\styles.css
+wwwroot\js\accessibility.js
 H:\GitHub\MockExam\CityPoint\CityPoint\wwwroot\lib\jquery\LICENSE.txt
 H:\GitHub\MockExam\CityPoint\CityPoint\wwwroot\lib\jquery\dist\jquery.slim.min.map
 H:\GitHub\MockExam\CityPoint\CityPoint\wwwroot\lib\jquery\dist\jquery.slim.min.js

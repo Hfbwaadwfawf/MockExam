@@ -134,7 +134,7 @@ namespace CityPoint.Data
                     Description = "Premium boardroom with video conferencing and seating for 12.",
                     HourlyRate = 75.00m,
                     Location = "5th Floor, Building A",
-                    IsAvailable = true
+                    IsAvailable = false,
                 },
                 new Room
                 {
@@ -142,7 +142,7 @@ namespace CityPoint.Data
                     Description = "Large hall for events and seminars up to 50 people.",
                     HourlyRate = 125.00m,
                     Location = "Ground Floor, Building B",
-                    IsAvailable = true
+                    IsAvailable = false,
                 },
                 new Room
                 {
@@ -150,7 +150,7 @@ namespace CityPoint.Data
                     Description = "Small collaborative meeting space for teams.",
                     HourlyRate = 35.00m,
                     Location = "3rd Floor, Building A",
-                    IsAvailable = true
+                    IsAvailable = true,
                 }
             };
 
