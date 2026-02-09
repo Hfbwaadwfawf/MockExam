@@ -12,6 +12,7 @@
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "9.0.12",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.12",
           "Microsoft.AspNetCore.Identity.UI": "9.0.12",
+          "Microsoft.Data.Sqlite.Core": "9.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.12",
           "Microsoft.EntityFrameworkCore.Sqlite": "9.0.12",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.12",

@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CityPoint")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d665fb03a3af70bbc7d0bbcabf9b33d730bb8daa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff71f2885221028b72e1038fd5c3d41f0d26e5d1")]
 [assembly: System.Reflection.AssemblyProductAttribute("CityPoint")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CityPoint")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

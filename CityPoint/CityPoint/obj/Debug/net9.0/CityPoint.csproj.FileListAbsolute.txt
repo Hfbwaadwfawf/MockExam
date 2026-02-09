@@ -876,12 +876,6 @@ H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\compressed\1grzq8pq11-d9
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets.build.json
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets.development.json
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets\msbuild.CityPoint.Microsoft.AspNetCore.StaticWebAssets.props
-H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets\msbuild.CityPoint.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets\msbuild.build.CityPoint.props
-H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.CityPoint.props
-H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.CityPoint.props
-H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets.pack.json
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\CityPoint.csproj.Up2Date
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\CityPoint.dll
@@ -889,3 +883,10 @@ H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\refint\CityPoint.dll
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\CityPoint.pdb
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\CityPoint.genruntimeconfig.cache
 H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\ref\CityPoint.dll
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\rpswa.dswa.cache.json
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\rjimswa.dswa.cache.json
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\staticwebassets.build.json.cache
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\compressed\oe2ul7qvkh-1wzjjhdl6b.gz
+H:\GitHub\MockExam\CityPoint\CityPoint\obj\Debug\net9.0\compressed\2udeng245t-wvg4nhokqt.gz

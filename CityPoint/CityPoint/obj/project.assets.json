@@ -9019,6 +9019,7 @@
       "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 9.0.12",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.12",
       "Microsoft.AspNetCore.Identity.UI >= 9.0.12",
+      "Microsoft.Data.Sqlite.Core >= 9.0.12",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.12",
       "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.12",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.12",
@@ -9067,9 +9068,9 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -9088,6 +9089,10 @@
             "version": "[9.0.12, )"
           },
           "Microsoft.AspNetCore.Identity.UI": {
+            "target": "Package",
+            "version": "[9.0.12, )"
+          },
+          "Microsoft.Data.Sqlite.Core": {
             "target": "Package",
             "version": "[9.0.12, )"
           },
@@ -9119,12 +9124,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[9.0.0, 9.0.0]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -9133,20 +9132,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.Build.Tasks.Core' 17.7.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-h4j7-5rxr-p4wc",
-      "libraryId": "Microsoft.Build.Tasks.Core",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  }
 }

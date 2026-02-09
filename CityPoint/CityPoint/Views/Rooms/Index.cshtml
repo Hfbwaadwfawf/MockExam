@@ -1,88 +1,153 @@
 ﻿@model IEnumerable<CityPoint.Models.Room>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Available Rooms";
 }
-<h1>Index</h1>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <h5 class="card-title">Filter Rooms</h5>
+<!-- PAGE HEADER -->
+<section class="fade-in-up mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="mb-1">Available Rooms</h1>
+            <p class="text-muted mb-0">
+                Browse meeting rooms and conference spaces by price and availability.
+            </p>
+        </div>
+
+        @if (User.IsInRole("Staff"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                + Create New Room
+            </a>
+        }
+    </div>
+</section>
+
+<!-- FILTERS -->
+<section class="mb-5">
+    <div class="glass-card p-4">
+        <h5 class="mb-3">Filter Rooms</h5>
+
         <form method="get" asp-action="Index">
-            <div class="row">
+            <div class="row g-3 align-items-end">
                 <div class="col-md-3">
-                    <label for="minPrice" class="form-label">Min Hourly Rate</label>
-                    <input type="number" step="0.01" class="form-control" id="minPrice" name="minPrice" value="@ViewData["MinPrice"]" placeholder="Min price">
+                    <label class="form-label">Min Hourly Rate (£)</label>
+                    <input type="number" step="0.01"
+                           class="form-control"
+                           name="minPrice"
+                           value="@ViewData["MinPrice"]"
+                           placeholder="0.00">
                 </div>
+
                 <div class="col-md-3">
-                    <label for="maxPrice" class="form-label">Max Hourly Rate</label>
-                    <input type="number" step="0.01" class="form-control" id="maxPrice" name="maxPrice" value="@ViewData["MaxPrice"]" placeholder="Max price">
+                    <label class="form-label">Max Hourly Rate (£)</label>
+                    <input type="number" step="0.01"
+                           class="form-control"
+                           name="maxPrice"
+                           value="@ViewData["MaxPrice"]"
+                           placeholder="100.00">
                 </div>
+
                 <div class="col-md-3">
-                    <label for="isAvailable" class="form-label">Availability</label>
-                    <select class="form-control" id="isAvailable" name="isAvailable">
+                    <label class="form-label">Availability</label>
+                    <select class="form-select" name="isAvailable">
                         <option value="">All</option>
-                        <option value="true" selected="@(ViewData["IsAvailable"] as bool? == true)">Available</option>
-                        <option value="false" selected="@(ViewData["IsAvailable"] as bool? == false)">Not Available</option>
+                        <option value="true" selected="@(ViewData["IsAvailable"] as bool? == true)">
+                            Available only
+                        </option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary mt-4">Apply Filters</button>
-                    <a asp-action="Index" class="btn btn-secondary mt-4">Clear</a>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Apply
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary w-100">
+                        Clear
+                    </a>
                 </div>
             </div>
         </form>
     </div>
-</div>
+</section>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HourlyRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAvailable)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<!-- ROOM LIST -->
+<section>
+    <div class="row g-4">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HourlyRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsAvailable)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.RoomId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.RoomId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.RoomId">Delete</a>
-                </td>
-            </tr>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-soft">
+                    <div class="card-body d-flex flex-column">
+                        <div class="mb-3">
+                            <h4 class="mb-1">@item.Name</h4>
+                            <p class="text-muted small mb-2">
+                                @item.Location
+                            </p>
+
+                            <p class="text-muted">
+                                @item.Description
+                            </p>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold text-primary">
+                                £@item.HourlyRate / hour
+                            </span>
+
+                            @if (item.IsAvailable)
+                            {
+                                <span class="badge bg-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Unavailable</span>
+                            }
+                        </div>
+
+                        <div class="mt-auto d-flex flex-wrap gap-2">
+                            <a asp-action="Details"
+                               asp-route-id="@item.RoomId"
+                               class="btn btn-sm btn-info">
+                                Details
+                            </a>
+
+                            @if (User.IsInRole("Customer") && item.IsAvailable)
+                            {
+                                <a asp-controller="Bookings"
+                                   asp-action="Create"
+                                   asp-route-roomId="@item.RoomId"
+                                   class="btn btn-sm btn-success">
+                                    Book Now
+                                </a>
+                            }
+
+                            @if (User.IsInRole("Staff"))
+                            {
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.RoomId"
+                                   class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.RoomId"
+                                   class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="glass-card p-4 text-center mt-4">
+            <p class="mb-0 text-muted">
+                No rooms match your current filters.
+            </p>
+        </div>
+    }
+</section>

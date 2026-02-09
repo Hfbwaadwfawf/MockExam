@@ -1,48 +1,88 @@
 ﻿@model CityPoint.Models.Room
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
 }
 
-<h1>Details</h1>
+<!-- PAGE HEADER -->
+<section class="fade-in-up mb-4">
+    <a asp-action="Index" class="text-muted text-decoration-none">
+        ← Back to Rooms
+    </a>
+</section>
 
-<div>
-    <h4>Room</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HourlyRate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HourlyRate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsAvailable)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsAvailable)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.RoomId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!-- ROOM HERO -->
+<section class="mb-5">
+    <div class="glass-card p-5">
+        <div class="row align-items-center">
+            <div class="col-md-8 mb-4 mb-md-0">
+                <h1 class="mb-2">@Model.Name</h1>
+
+                <p class="text-muted mb-3">
+                    @Model.Location
+                </p>
+
+                <p class="mb-4">
+                    @Model.Description
+                </p>
+
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <span class="fs-5 fw-semibold text-primary">
+                        £@Model.HourlyRate / hour
+                    </span>
+
+                    @if (Model.IsAvailable)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Unavailable</span>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-4 text-md-end">
+                @if (User.IsInRole("Customer") && Model.IsAvailable)
+                {
+                    <a asp-controller="Bookings"
+                       asp-action="Create"
+                       asp-route-roomId="@Model.RoomId"
+                       class="btn btn-primary btn-lg w-100 mb-2">
+                        Book This Room
+                    </a>
+                }
+
+                <a asp-action="Index" class="btn btn-secondary w-100">
+                    Back to Rooms
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STAFF ACTIONS -->
+@if (User.IsInRole("Staff"))
+{
+    <section>
+        <div class="card shadow-soft">
+            <div class="card-body">
+                <h5 class="mb-3">Staff Actions</h5>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.RoomId"
+                       class="btn btn-warning">
+                        Edit Room
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@Model.RoomId"
+                       class="btn btn-danger">
+                        Delete Room
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+}

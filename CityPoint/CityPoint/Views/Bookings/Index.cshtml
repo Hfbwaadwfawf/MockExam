@@ -1,106 +1,121 @@
 ﻿@model IEnumerable<CityPoint.Models.Booking>
+
 @{
-    ViewData["Title"] = "My Bookings";
+    ViewData["Title"] = "Bookings";
 }
-<h1>@(User.IsInRole("Staff") ? "All Bookings" : "My Bookings")</h1>
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Booking</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckInDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOutDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfGuests)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SpecialRequests)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Room)
-            </th>
-            @if (User.IsInRole("Staff"))
-            {
-                <th>
-                    @Html.DisplayNameFor(model => model.User)
-                </th>
-            }
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+
+<section class="fade-in-up mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="mb-1">
+                @(User.IsInRole("Staff") ? "All Bookings" : "My Bookings")
+            </h1>
+            <p class="text-muted mb-0">
+                View and manage room bookings.
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Create Booking
+        </a>
+    </div>
+</section>
+
+<section>
+    <div class="glass-card p-4">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Guests</th>
+                        <th>Status</th>
+                        <th>Room</th>
+                        @if (User.IsInRole("Staff"))
+                        {
+                            <th>User</th>
+                        }
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.CheckInDate</td>
+                            <td>@item.CheckOutDate</td>
+                            <td>@item.NumberOfGuests</td>
+                            <td>
+                                <span class="badge bg-@(item.Status == "Approved" ? "success" : item.Status == "Denied" ? "danger" : "warning")">
+                                    @item.Status
+                                </span>
+                            </td>
+                            <td>@item.Room?.Name</td>
+
+                            @if (User.IsInRole("Staff"))
+                            {
+                                <td>@item.User?.Email</td>
+                            }
+
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-1 flex-wrap justify-content-end">
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.BookingId"
+                                       class="btn btn-sm btn-info">
+                                        Details
+                                    </a>
+
+                                    @if (item.Status == "Pending" || User.IsInRole("Staff"))
+                                    {
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.BookingId"
+                                           class="btn btn-sm btn-warning">
+                                            Edit
+                                        </a>
+                                    }
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.BookingId"
+                                       class="btn btn-sm btn-danger">
+                                        Delete
+                                    </a>
+
+                                    @if (User.IsInRole("Staff") && item.Status == "Pending")
+                                    {
+                                        <form asp-action="Approve"
+                                              asp-route-id="@item.BookingId"
+                                              method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-success">
+                                                Approve
+                                            </button>
+                                        </form>
+
+                                        <form asp-action="Deny"
+                                              asp-route-id="@item.BookingId"
+                                              method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-danger">
+                                                Deny
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Any())
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckInDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckOutDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumberOfGuests)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SpecialRequests)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsPaid)
-                </td>
-                <td>
-                    <span class="badge bg-@(item.Status == "Approved" ? "success" : item.Status == "Denied" ? "danger" : "warning")">
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </span>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Room.Name)
-                </td>
-                @if (User.IsInRole("Staff"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.User.Email)
-                    </td>
-                }
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.BookingId" class="btn btn-sm btn-info">Details</a>
-
-                    @if (item.Status == "Pending" || User.IsInRole("Staff"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.BookingId" class="btn btn-sm btn-warning">Edit</a>
-                    }
-
-                    <a asp-action="Delete" asp-route-id="@item.BookingId" class="btn btn-sm btn-danger">Delete</a>
-
-                    @if (User.IsInRole("Staff") && item.Status == "Pending")
-                    {
-                        <form asp-action="Approve" asp-route-id="@item.BookingId" method="post" style="display:inline;">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Are you sure you want to approve this booking?');">Approve</button>
-                        </form>
-                        <form asp-action="Deny" asp-route-id="@item.BookingId" method="post" style="display:inline;">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to deny this booking?');">Deny</button>
-                        </form>
-                    }
-                </td>
-            </tr>
+            <p class="text-muted text-center mb-0">
+                No bookings found.
+            </p>
         }
-    </tbody>
-</table>
+    </div>
+</section>

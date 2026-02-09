@@ -23,6 +23,9 @@ namespace CityPoint.Data
             // Seed rooms
             await SeedRooms(context, userManager);
 
+            // Seed staff
+            await SeedStaff(context);
+
             // Seed bookings
             await SeedBookingsAsync(serviceProvider, userManager);
         }
@@ -131,7 +134,7 @@ namespace CityPoint.Data
                     Description = "Premium boardroom with video conferencing and seating for 12.",
                     HourlyRate = 75.00m,
                     Location = "5th Floor, Building A",
-                    IsAvailable = false,
+                    IsAvailable = true
                 },
                 new Room
                 {
@@ -139,7 +142,7 @@ namespace CityPoint.Data
                     Description = "Large hall for events and seminars up to 50 people.",
                     HourlyRate = 125.00m,
                     Location = "Ground Floor, Building B",
-                    IsAvailable = true,
+                    IsAvailable = true
                 },
                 new Room
                 {
@@ -147,11 +150,61 @@ namespace CityPoint.Data
                     Description = "Small collaborative meeting space for teams.",
                     HourlyRate = 35.00m,
                     Location = "3rd Floor, Building A",
-                    IsAvailable = true,
+                    IsAvailable = true
                 }
             };
 
             context.Room.AddRange(rooms);
+            await context.SaveChangesAsync();
+        }
+
+        // SEED STAFF
+        private static async Task SeedStaff(ApplicationDbContext context)
+        {
+            if (context.Staff.Any())
+                return; // Already seeded
+
+            var staffMembers = new List<Staff>
+            {
+                new Staff
+                {
+                    Name = "Sarah Johnson",
+                    Role = "Front Desk Manager",
+                    Bio = "Sarah has over 10 years of experience in hospitality management. She's your first point of contact for any booking inquiries or general questions."
+                },
+                new Staff
+                {
+                    Name = "Michael Chen",
+                    Role = "Technical Support Specialist",
+                    Bio = "Michael handles all technical issues including AV equipment, video conferencing setup, and IT support for our meeting rooms."
+                },
+                new Staff
+                {
+                    Name = "Emma Williams",
+                    Role = "Event Coordinator",
+                    Bio = "Emma specializes in organizing corporate events, conferences, and special occasions. Contact her for catering and event planning assistance."
+                },
+                new Staff
+                {
+                    Name = "David Martinez",
+                    Role = "Facilities Manager",
+                    Bio = "David ensures all our rooms are maintained to the highest standards. Report any facility issues or maintenance requests to him."
+                },
+                new Staff
+                {
+                    Name = "Lisa Anderson",
+                    Role = "Customer Service Representative",
+                    Bio = "Lisa is here to help with account inquiries, billing questions, and general customer support. She's always ready to assist with a smile."
+                },
+                new Staff
+                {
+                    Name = "James Thompson",
+                    Role = "Security Coordinator",
+                    Bio = "James oversees building security and access control. Contact him for security badges, after-hours access, or safety concerns."
+                }
+            };
+
+            context.Staff.AddRange(staffMembers);
             await context.SaveChangesAsync();
         }
 

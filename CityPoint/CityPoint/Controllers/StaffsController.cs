@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CityPoint.Data;
 using CityPoint.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CityPoint.Controllers
 {
@@ -19,13 +20,15 @@ namespace CityPoint.Controllers
             _context = context;
         }
 
-        // GET: Staffs
+        // GET: Staffs - Anyone logged in can view staff
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Staff.ToListAsync());
         }
 
-        // GET: Staffs/Details/5
+        // GET: Staffs/Details/5 - Anyone logged in can view staff details
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,29 +46,31 @@ namespace CityPoint.Controllers
             return View(staff);
         }
 
-        // GET: Staffs/Create
+        // GET: Staffs/Create - Only Staff role can create
+        [Authorize(Roles = "Staff")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Staffs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Staffs/Create - Only Staff role can create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StaffId,Name,Role,Bio")] Staff staff)
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> Create([Bind("Name,Role,Bio")] Staff staff)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(staff);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Staff member added successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(staff);
         }
 
-        // GET: Staffs/Edit/5
+        // GET: Staffs/Edit/5 - Only Staff role can edit
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,11 +86,10 @@ namespace CityPoint.Controllers
             return View(staff);
         }
 
-        // POST: Staffs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Staffs/Edit/5 - Only Staff role can edit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Edit(int id, [Bind("StaffId,Name,Role,Bio")] Staff staff)
         {
             if (id != staff.StaffId)
@@ -99,6 +103,7 @@ namespace CityPoint.Controllers
                 {
                     _context.Update(staff);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Staff member updated successfully!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +121,8 @@ namespace CityPoint.Controllers
             return View(staff);
         }
 
-        // GET: Staffs/Delete/5
+        // GET: Staffs/Delete/5 - Only Staff role can delete
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,18 +140,20 @@ namespace CityPoint.Controllers
             return View(staff);
         }
 
-        // POST: Staffs/Delete/5
+        // POST: Staffs/Delete/5 - Only Staff role can delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var staff = await _context.Staff.FindAsync(id);
             if (staff != null)
             {
                 _context.Staff.Remove(staff);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Staff member deleted successfully!";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -30,7 +30,7 @@ namespace CityPoint.Controllers
             // Filter by minimum price
             if (minPrice.HasValue)
             {
-                room = room.Where(r => r.HourlyRate >= (decimal)maxPrice.Value);
+                room = room.Where(r => r.HourlyRate >= (decimal)minPrice.Value);
             }
 
             // Filter by maximum price

@@ -1,72 +1,59 @@
 ﻿@model CityPoint.Models.Booking
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Booking Details";
 }
 
-<h1>Details</h1>
+<section class="fade-in-up mb-4">
+    <a asp-action="Index" class="text-muted text-decoration-none">
+        ← Back to Bookings
+    </a>
+</section>
 
-<div>
-    <h4>Booking</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CheckInDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CheckInDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CheckOutDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CheckOutDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfGuests)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfGuests)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SpecialRequests)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SpecialRequests)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPaid)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPaid)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Room)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Room.RoomId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.BookingId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<section>
+    <div class="glass-card p-5">
+        <h1 class="mb-2">Booking Details</h1>
+
+        <span class="badge bg-@(Model.Status == "Approved" ? "success" : Model.Status == "Denied" ? "danger" : "warning") mb-3">
+            @Model.Status
+        </span>
+
+        <div class="row g-4 mt-2">
+            <div class="col-md-6">
+                <p><strong>Room:</strong> @Model.Room?.Name</p>
+                <p><strong>Guests:</strong> @Model.NumberOfGuests</p>
+                <p><strong>Paid:</strong> @(Model.IsPaid ? "Yes" : "No")</p>
+            </div>
+
+            <div class="col-md-6">
+                <p><strong>Check In:</strong> @Model.CheckInDate</p>
+                <p><strong>Check Out:</strong> @Model.CheckOutDate</p>
+                <p><strong>Created:</strong> @Model.CreatedAt</p>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.SpecialRequests))
+        {
+            <hr />
+            <p>
+                <strong>Special Requests</strong><br />
+                @Model.SpecialRequests
+            </p>
+        }
+
+        <div class="mt-4 d-flex gap-2 flex-wrap">
+            @if (Model.Status == "Pending" || User.IsInRole("Staff"))
+            {
+                <a asp-action="Edit"
+                   asp-route-id="@Model.BookingId"
+                   class="btn btn-warning">
+                    Edit Booking
+                </a>
+            }
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Back
+            </a>
+        </div>
+    </div>
+</section>

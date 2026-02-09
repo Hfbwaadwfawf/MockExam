@@ -1,47 +1,98 @@
 ﻿@model IEnumerable<CityPoint.Models.Staff>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Meet Our Team";
 }
 
-<h1>Index</h1>
+<div class="container my-5">
+    <div class="text-center mb-5 fade-in-up">
+        <h1 class="display-4 text-gradient">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Our dedicated staff members are here to help you with all your needs</p>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bio)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bio)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StaffId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.StaffId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.StaffId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @if (User.IsInRole("Staff"))
+    {
+        <div class="text-end mb-4">
+            <a asp-action="Create" class="btn btn-primary shadow-glow">
+                Add New Staff Member
+            </a>
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="staff-avatar-header">
+                            <div class="staff-avatar-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="white" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h5 class="fw-bold mb-2">@item.Name</h5>
+                            <span class="badge bg-primary mb-3">@item.Role</span>
+                            <p class="text-muted small">
+                                @if (!string.IsNullOrEmpty(item.Bio))
+                                {
+                                    @item.Bio
+                                }
+                                else
+                                {
+                                    <span class="fst-italic">No bio available</span>
+                                }
+                            </p>
+                        </div>
+
+                        @if (User.IsInRole("Staff"))
+                        {
+                            <div class="card-footer bg-transparent border-0">
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a asp-action="Edit" asp-route-id="@item.StaffId" class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.StaffId" class="btn btn-sm btn-info">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.StaffId" class="btn btn-sm btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="glass-card p-5">
+                <h4 class="text-muted mb-2">No staff members yet</h4>
+                <p class="text-muted">Add your first staff member to get started</p>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .staff-avatar-header {
+        height: 200px;
+        background: var(--gradient-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .staff-avatar-circle {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid rgba(255, 255, 255, 0.5);
+    }
+</style>
